@@ -5,12 +5,15 @@
  */
 package controllers;
 
+import entities.Student;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import services.StudentService;
 
 /**
  *
@@ -56,7 +59,35 @@ public class UpdateStudentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+         response.setContentType("text/html;charset=UTF-8");
+        Student st = new Student();
+        StudentService ss = new StudentService();
+        long id = Long.parseLong(request.getParameter("update"));
+        
+        try (PrintWriter out = response.getWriter()) {
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet UpdateStudentServlet</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet UpdateStudentServlet at " + request.getContextPath() + "</h1>");
+            
+            RequestDispatcher rd = request.getRequestDispatcher("updatestudent.jsp");
+            request.setAttribute("id", id);
+            request.setAttribute("title", "Update Student");
+            request.setAttribute("action", "UpdateStudentServlet");
+            request.setAttribute("student", st);
+            request.setAttribute("button", "Update");
+            
+       
+            
+            
+             rd.forward(request, response);
+            out.println("</body>");
+            out.println("</html>");
+    }
+        
     }
 
     /**
@@ -70,9 +101,36 @@ public class UpdateStudentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String qString = request.getQueryString();
+        StudentService ss = new StudentService();
+        Student st= new Student();
+         
+        
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet UpdateStudentServlet</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet UpdateStudentServlet at " + request.getContextPath() + "</h1>");
+           
+            st.setId(Long.parseLong(request.getParameter("update")));
+            st.setSurname(request.getParameter("surname"));
+            st.setName(request.getParameter("name"));
+            st.setGrade(Float.parseFloat(request.getParameter("grade")));
+                    st.setBirthDate(request.getParameter("birthdate"));
+            if (ss.UpdateStudent(st)) {
+                out.print("<h2>Student updated</h2>");
+            } else {
+                out.print("<h2>not updated!</h2>");
+            }
+             out.println("</body>");
+            out.println("</html>");
+       
+        }
     }
-
     /**
      * Returns a short description of the servlet.
      *

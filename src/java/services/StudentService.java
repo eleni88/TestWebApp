@@ -6,74 +6,66 @@
 package services;
 
 import entities.Student;
-import controllers.StudentServlet;
-import dao.Database;
 import dao.StudentDAO;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author George.Pasparakis
- */
+
 public class StudentService {
 
-    
-    PrintWriter out;
-     
-    
-     
-    
-//        public void htmltext( List<Student> s) {
-//            /* TODO output your page here. You may use following sample code. */
-//            out.println("<!DOCTYPE html>");
-//            out.println("<html>");
-//            out.println("<head>");
-//            out.println("<title>Student Servlet</title>");            
-//            out.println("</head>");
-//            out.println("<body>");
-//            out.println("<br />");
-//            out.println(s);
-//            out.println("</body>");
-//            out.println("</html>");
-//        }
+    StudentDAO stuDao = new StudentDAO();
+
+
     public String getStudents() {
 
-      
- StudentDAO s = new StudentDAO();
-        List<Student> students2 = s.get();
+        StudentDAO s = new StudentDAO();
+        List<Student> students = s.getStudents();
         StringBuilder stbld = new StringBuilder();
         stbld.append(stbld)
                 .append("<!DOCTYPE html>")
-                .append("<html>") 
+                .append("<html>")
                 .append("<head>")
                 .append("</head>")
                 .append("<body>");
-                for (Student st: students2){
-                stbld.append("<p>").append(s).append("</p>");
-                }
-                stbld.append("</body>");
-                
-//        for (int i = students2.size(); i > 0; i++) {
-//           
-//            stbld.append(htmltext(students2.get(i)));}
-         
+        for (Student st : students) {
+            String delete = "<a href='DeleteStudentServlet?delete=" + st.getId() + "'>Delete</a>";
+            String update = "<a href='UpdateStudentServlet?update=" + st.getId() + "'>Update</a>";
+            
+            stbld.append("<p>").append(st).append(delete).append(update).append("</p>");
+        }
+        String input = "<a href='InputStudentServlet" + "'>Input</a>";
+        stbld.append("<p>").append(input).append("</p>");
+        stbld.append("</body>").append("</html>");
         
 
         String str = stbld.toString();
 
         return str;
     }
+
+    public boolean InsertStudent(Student st) {
+
+        if (stuDao.InsertStudentJPA(st)) 
+            return true;
+        return false;
+    }
     
     
+
+    public boolean DeleteStudent(int id) {
+
+        if (stuDao.DeleteStudent(id)) 
+            return true;
+       return false;
+    }
+    
+    public Student GetStudentById(int id2){
+      return stuDao.GetStudentById(id2);
+        
+    }
+    
+    public boolean UpdateStudent(Student st){
+    if(stuDao.UpdateStudentJPA(st)) return true;
+    return false;
+    }
 
 }

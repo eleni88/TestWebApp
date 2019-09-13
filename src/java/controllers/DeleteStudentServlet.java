@@ -5,12 +5,14 @@
  */
 package controllers;
 
+import entities.Student;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import services.StudentService;
 
 /**
  *
@@ -56,9 +58,31 @@ public class DeleteStudentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        StudentService ss = new StudentService();
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet DeleteStudentServlet</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet DeleteStudentServlet at " + request.getContextPath() + "</h1>");
+           
+            if (request.getParameter("delete") != null){
+                int id = Integer.parseInt(request.getParameter("delete"));
+                ss.DeleteStudent(id);
+                out.println("<h2>deleted successfully<h2>");
+            }else{out.println("<h2>failed</h2>");}
+            
+            
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
-
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *

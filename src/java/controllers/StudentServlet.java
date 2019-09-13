@@ -44,7 +44,7 @@ public class StudentServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MyServlet</title>");          
+            out.println("<title>Servlet MyServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet MyServlet at " + request.getContextPath() + "</h1>");
@@ -65,14 +65,19 @@ public class StudentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         StudentService stuServ = new StudentService();
-         response.setContentType("text/html;charset=UTF-8");
+        String qString = request.getQueryString();
+        StudentService stuServ = new StudentService();
+        response.setContentType("text/html;charset=UTF-8");
 
         try (PrintWriter out = response.getWriter()) {
-            out.println(stuServ.getStudents());}
-            /* TODO output your page here. You may use following sample code. */
-            
-        
+           
+            out.println(stuServ.getStudents());
+             
+            if (qString != null) {
+                out.println(qString);
+                out.println("Param delete: " + request.getParameter("delete"));
+            }
+        }
     }
 
     /**

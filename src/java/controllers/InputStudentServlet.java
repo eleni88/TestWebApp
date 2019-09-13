@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import entities.Student;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -12,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import services.StudentService;
 
 /**
  *
@@ -36,7 +38,7 @@ public class InputStudentServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet InputStudentServlet</title>");            
+            out.println("<title>Servlet InputStudentServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet InputStudentServlet at " + request.getContextPath() + "</h1>");
@@ -57,7 +59,7 @@ public class InputStudentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher  rd = request.getRequestDispatcher("newstudent.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("newstudent.jsp");
         request.setAttribute("title", "Insert new student");
         rd.forward(request, response);
     }
@@ -74,16 +76,27 @@ public class InputStudentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        Student st;
+        StudentService ss = new StudentService();
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet InputStudentServlet</title>");            
+            out.println("<title>Servlet InputStudentServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet InputStudentServlet at " + request.getContextPath() + "</h1>");
-            out.println(request.getParameter("name")+" "+request.getParameter("surname"));
+            st = new Student(request.getParameter("surname"),
+                    request.getParameter("name"),
+                    Float.parseFloat(request.getParameter("grade")),
+                    request.getParameter("birthdate"));
+            if (ss.InsertStudent(st)) {
+                out.print("<h2>All inserted!</h2>");
+            } else {
+                out.print("<h2>not inserted!</h2>");
+            }
+
+            //out.println(request.getParameter("name")+" "+request.getParameter("surname"));
             out.println("</body>");
             out.println("</html>");
         }

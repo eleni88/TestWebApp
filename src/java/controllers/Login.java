@@ -80,8 +80,8 @@ public class Login extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
-            out.println("The username you typed is: " + request.getParameter("username") + " - koukouroukou");
-            out.println("The password you typed is: " + request.getParameter("password"));
+//            out.println("The username you typed is: " + request.getParameter("username") + " - koukouroukou");
+//            out.println("The password you typed is: " + request.getParameter("password"));
             out.println("</body>");
             out.println("</html>");
         }
